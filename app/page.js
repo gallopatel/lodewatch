@@ -94,7 +94,7 @@ export default function Home() {
         </section>
 
         <footer className="mt-16 pt-8 border-t border-gray-800 text-sm text-gray-500">
-          v0.1 · {new Date().getFullYear()} · built by Gallo Patel
+          v0.1 · {new Date().getFullYear()} · built by Gallo Crane Patel
         </footer>
       </div>
     </main>
