@@ -1,52 +1,22 @@
-const mines = [
-  {
-    id: 1,
-    name: "Greenbushes",
-    country: "Australia",
-    operator: "Talison Lithium (Albemarle / Tianqi / IGO)",
-    commodity: "Lithium",
-    annualProduction: "1.95 Mt spodumene concentrate (2023)",
-    status: "Operating",
-  },
-  {
-    id: 2,
-    name: "Salar de Atacama",
-    country: "Chile",
-    operator: "SQM / Albemarle",
-    commodity: "Lithium",
-    annualProduction: "~180,000 t LCE (2023)",
-    status: "Operating",
-  },
-  {
-    id: 3,
-    name: "Mutanda",
-    country: "DRC",
-    operator: "Glencore",
-    commodity: "Cobalt",
-    annualProduction: "~25,000 t cobalt (2023)",
-    status: "Operating",
-  },
-  {
-    id: 4,
-    name: "Sorowako",
-    country: "Indonesia",
-    operator: "PT Vale Indonesia",
-    commodity: "Nickel",
-    annualProduction: "~71,000 t nickel matte (2023)",
-    status: "Operating",
-  },
-  {
-    id: 5,
-    name: "Balama",
-    country: "Mozambique",
-    operator: "Syrah Resources",
-    commodity: "Graphite",
-    annualProduction: "~100,000 t natural graphite (2023)",
-    status: "Care and maintenance (2024)",
-  },
-];
+import { supabase } from '@/lib/supabase';
 
-export default function Home() {
+export default async function Home() {
+  const { data: mines, error } = await supabase
+    .from('mines')
+    .select('*')
+    .order('name', { ascending: true });
+
+  if (error) {
+    return (
+      <main className="min-h-screen bg-gray-950 text-gray-100 p-8">
+        <div className="max-w-5xl mx-auto">
+          <h1 className="text-2xl font-bold">Error loading mines</h1>
+          <pre className="mt-4 text-red-400 text-sm">{error.message}</pre>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-gray-950 text-gray-100 p-8">
       <div className="max-w-5xl mx-auto">
@@ -54,6 +24,9 @@ export default function Home() {
           <h1 className="text-4xl font-bold tracking-tight">Lodewatch</h1>
           <p className="text-gray-400 mt-2">
             A free dashboard tracking battery-mineral mines worldwide.
+          </p>
+          <p className="text-xs text-gray-500 mt-1">
+            {mines.length} mines tracked · live from database
           </p>
         </header>
 
@@ -78,13 +51,13 @@ export default function Home() {
                 </p>
                 <div className="text-sm space-y-1">
                   <div>
-                    <span className="text-gray-500">Production:</span>{" "}
+                    <span className="text-gray-500">Production:</span>{' '}
                     <span className="text-gray-200">
-                      {mine.annualProduction}
+                      {mine.annual_production}
                     </span>
                   </div>
                   <div>
-                    <span className="text-gray-500">Status:</span>{" "}
+                    <span className="text-gray-500">Status:</span>{' '}
                     <span className="text-gray-200">{mine.status}</span>
                   </div>
                 </div>
@@ -94,7 +67,7 @@ export default function Home() {
         </section>
 
         <footer className="mt-16 pt-8 border-t border-gray-800 text-sm text-gray-500">
-          v0.1 · {new Date().getFullYear()} · built by Gallo Crane Patel
+          v0.2 · {new Date().getFullYear()} · built by Gallo Patel
         </footer>
       </div>
     </main>
